@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PythonClassifierService.iml" filepath="$PROJECT_DIR$/.idea/PythonClassifierService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PythonTranslateService/.idea/PythonTranslateService.iml" filepath="$PROJECT_DIR$/../PythonTranslateService/.idea/PythonTranslateService.iml" />
     </modules>
   </component>
 </project>

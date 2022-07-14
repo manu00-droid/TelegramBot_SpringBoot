@@ -5,7 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/classifiers/apis/AI_models" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (PythonClassifierService)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="PythonTranslateService" />
   </component>
 </module>

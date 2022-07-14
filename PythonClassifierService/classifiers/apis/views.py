@@ -1,22 +1,36 @@
 from rest_framework.decorators import api_view
-import logging
-
 from rest_framework.response import Response
 import json
-
+import os
 import rice_classifiers
 import wheat_classifier
 
 
+# rice_classifiers = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+#                                 '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService'
+#                                 '/classifiers '
+#                                 '/apis/AI_models/rice_classifiers.py')
+#
+# wheat_classifier = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+#                                 '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService'
+#                                 '/classifiers '
+#                                 '/apis/AI_models/wheat_classifier.py')
+
+
 @api_view(['POST'])
 def predict(request):
-    data = json.loads(request.body.decode('utf-8'))
-    file_path = data['file_path']
-    crop = data['crop']
+    # data = json.loads(request.body.decode('utf-8'))
+    # # data=request.body
+    # print(data)
+    print(request.POST.get)
+    file_path = request.POST.get('file_path')
+    crop = request.POST.get('crop')
     print(file_path)
     print(crop)
     if crop == 'rice':
-        return Response(rice_classifiers.disease_prediction(file_path))
+        disease = rice_classifiers.disease_prediction(file_path)
+        return Response(disease)
     if crop == 'wheat':
-        return Response(wheat_classifier.disease_prediction(file_path))
+        disease = wheat_classifier.disease_prediction(file_path)
+        return Response(disease)
     return Response("invalid crop")

@@ -14,7 +14,7 @@ def disease_prediction(im):
     print(prediction)
     for i in range(7):
         if prediction[i][1] > 0.5:
-            return prediction([i][0])
+            return prediction[i][0]
     return "no disease found"
 
 # print(disease_prediction("/home/manav/Crop_Saviour/file_0.jpg"))
