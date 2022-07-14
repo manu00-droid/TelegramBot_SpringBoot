@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bot Service/CropSaviour.iml" filepath="$PROJECT_DIR$/Bot Service/CropSaviour.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/TelegramBot_SpringBoot.iml" filepath="$PROJECT_DIR$/.idea/TelegramBot_SpringBoot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
+    </modules>
+  </component>
+</project>
