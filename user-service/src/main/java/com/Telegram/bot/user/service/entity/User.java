@@ -24,5 +24,6 @@ public class User {
     private Long chatId;
     private Long userId;
     private String language;
+    private String Crop;
 
 }
