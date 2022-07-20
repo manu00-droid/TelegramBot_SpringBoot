@@ -4,8 +4,7 @@ from PIL import Image
 import os
 
 rice_model = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                          '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService/classifiers'
-                          '/apis/AI_models/rice.pt')
+                          '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService/classifiers/apis/AI_models/rice.pt')
 
 
 def proc_rice(im):

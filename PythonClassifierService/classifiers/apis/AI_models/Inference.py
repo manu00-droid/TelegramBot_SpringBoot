@@ -6,8 +6,7 @@ import torch
 import numpy as np
 
 wheat_model = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                           '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService/classifiers'
-                           '/apis/AI_models/DiseaseClassification.pt')
+                           '/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/PythonClassifierService/classifiers/apis/AI_models/DiseaseClassification.pt')
 
 
 class DiseaseClassification:

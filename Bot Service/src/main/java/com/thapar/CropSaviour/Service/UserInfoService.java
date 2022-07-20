@@ -18,7 +18,10 @@ public class UserInfoService {
     private final String BASE_URI = "http://127.0.0.1:8081/users/";
     private final String GET_LANGUAGE = "getlanguage/{chatId}";
     private final String GET_CROP = "getcrop/{chatId}";
+    private final String SET_CROP_NULL = "setcropnull/{chatId}";
     private WebClient webClient = WebClient.create(BASE_URI);
+
+
     //			MultiValueMap<String, Long> bodyValues = new LinkedMultiValueMap<>();
 //			bodyValues.add("chatId", update.getMessage().getChatId());
 //			String uri = "http://127.0.0.1:8081/users/" + update.getMessage().getChatId().toString();
@@ -166,47 +169,36 @@ public class UserInfoService {
     }
 
     public void setLanguageByChatId(String language, Long chatId) {
-//        boolean presentLanguage = isPresentLanguage(chatId);
         MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
         bodyValues.add("language", language);
         User user;
-//        if (presentLanguage) {
         user = webClient.put()
                 .uri(chatId.toString())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromFormData(bodyValues))
                 .retrieve()
                 .bodyToMono(User.class).block();
-//        } else {
-//            user = webClient.post()
-//                    .uri(chatId.toString())
-//                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                    .body(BodyInserters.fromFormData(bodyValues))
-//                    .retrieve()
-//                    .bodyToMono(User.class).block();
-//        }
     }
 
     public void setCropByChatId(String cropType, Long chatId) {
-//        String presentCrop = getCropByChatId(chatId);
         MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
         bodyValues.add("Crop", cropType);
 
         User user;
-//        if (!presentCrop.equals(null)) {
         user = webClient.put()
                 .uri(chatId.toString())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromFormData(bodyValues))
                 .retrieve()
                 .bodyToMono(User.class).block();
-//        } else {
-//        user = webClient.post()
-//                .uri(chatId.toString())
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .body(BodyInserters.fromFormData(bodyValues))
-//                .retrieve()
-//                .bodyToMono(User.class).block();
-//        }
+
+    }
+
+    public void setCropNull(Long chatId) {
+        webClient.put()
+                .uri(SET_CROP_NULL, chatId.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(User.class).block();
     }
 }

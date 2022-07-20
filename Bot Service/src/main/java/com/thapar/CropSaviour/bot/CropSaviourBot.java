@@ -1,24 +1,18 @@
 package com.thapar.CropSaviour.bot;
 
 import com.thapar.CropSaviour.Service.*;
-import com.thapar.CropSaviour.VO.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 
 @Component
 public class CropSaviourBot extends TelegramLongPollingBot {
@@ -33,6 +27,8 @@ public class CropSaviourBot extends TelegramLongPollingBot {
     private TranslateService translateService;
     @Autowired
     private RemedyService remedyService;
+    @Autowired
+    private AudioService audioService;
     private final String IMAGE_DOWNLOAD_PATH = "/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/Bot Service/src/main/java/com/thapar/CropSaviour/DownloadedImages/";
 
     @Override
@@ -41,6 +37,8 @@ public class CropSaviourBot extends TelegramLongPollingBot {
             try {
                 messageHandler(update);
             } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if (update.hasCallbackQuery()) {
@@ -53,7 +51,7 @@ public class CropSaviourBot extends TelegramLongPollingBot {
     }
 
 
-    private void messageHandler(Update update) throws TelegramApiException {
+    private void messageHandler(Update update) throws Exception {
         SendMessage response = new SendMessage();
         Message message = update.getMessage();
         Long chatId = message.getChatId();
@@ -89,30 +87,18 @@ public class CropSaviourBot extends TelegramLongPollingBot {
                 if (cropType != null) {
                     String disease = classifierService.classifyDisease(IMAGE_DOWNLOAD_PATH + file, cropType);
                     disease = disease.substring(1, disease.length() - 1);
-                    String remedy;
-                    if (cropType.equalsIgnoreCase("rice")) {
-                        remedy = remedyService.riceDiseaseRemedy(disease, chatId);
-                    } else {
-                        remedy = remedyService.wheatDiseaseRemedy(disease, chatId);
-                    }
-                    response.setText(disease + "\n" + remedy);
+                    System.out.println(disease);
+                    response.setText(disease);
                     execute(response);
-
-//                    MultipartBodyBuilder builder = new MultipartBodyBuilder();
-//                    builder.part("file", multipartFile.getResource());
-//
-//                    String url = "https://api.telegram.org/5459955578:AAG-Dr0d8bWluBk9y4RAuKFiWTRkg6JGHpI/sendAudio";
-//                    MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
-//                    bodyValues.add("chat_id", chatId.toString());
-//                    bodyValues.add("audio", "/home/manav/Work/IdeaProjects/TelegramBot_SpringBoot/Bot Service/src/main/java/com/thapar/CropSaviour/Bacterial Blight_rice_english.mp3");
-//                    WebClient webClient = WebClient.create();
-//                    Message message1 = webClient.post()
-//                            .uri(url)
-//                            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                            .body(BodyInserters.fromFormData(bodyValues))
-//                            .retrieve()
-//                            .bodyToMono(Message.class).block();
-
+                    if (cropType.equalsIgnoreCase("rice")) {
+                        response = remedyService.riceDiseaseRemedy(disease, chatId);
+                    } else {
+                        response = remedyService.wheatDiseaseRemedy(disease, chatId);
+                    }
+                    execute(response);
+                    if (!disease.equalsIgnoreCase("no disease found")) {
+                        execute(audioService.sendAudio(chatId, disease));
+                    }
                 } else {
                     response = keyboardService.sendInlineKeyboardForCrop(chatId);
                     execute(response);
@@ -157,7 +143,6 @@ public class CropSaviourBot extends TelegramLongPollingBot {
             execute(response);
         }
     }
-
 
     private String downloadPhoto(Message message) throws TelegramApiException {
         final List<PhotoSize> photos = message.getPhoto();

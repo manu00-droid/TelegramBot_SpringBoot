@@ -49,4 +49,9 @@ public class UserController {
         return userService.updateUser(chatId,user);
     }
 
+    @PutMapping("/setcropnull/{chatId}")
+    public void setCropNull(@PathVariable("chatId") Long chatId){
+         userService.setCropNull(chatId);
+    }
+
 }

@@ -55,4 +55,8 @@ public class UserService {
         }
         return userRepository.save(userDB);
     }
+
+    public void setCropNull(Long chatId){
+         userRepository.setCropNull(chatId);
+    }
 }
