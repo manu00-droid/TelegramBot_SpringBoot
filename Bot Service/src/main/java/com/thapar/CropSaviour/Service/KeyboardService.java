@@ -1,7 +1,5 @@
 package com.thapar.CropSaviour.Service;
 
-import com.thapar.CropSaviour.Service.TranslateService;
-import com.thapar.CropSaviour.Service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
