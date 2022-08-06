@@ -8,25 +8,26 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.thapar.CropSaviour.Service"})
 public class CropSaviourApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SpringApplication.run(CropSaviourApplication.class, args);
+        SpringApplication.run(CropSaviourApplication.class, args);
 
-	}
-	@Bean
-	public RestTemplate restTemplate(){
-		return new RestTemplate();
-	}
+    }
 
-	@Bean
-	public WebClient getWebClient(WebClient.Builder webClientBuilder) {
-		return webClientBuilder
-				.baseUrl("https://reqres.in/api")
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.build();
-	}
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public WebClient getWebClient(WebClient.Builder webClientBuilder) {
+        return webClientBuilder
+                .baseUrl("https://reqres.in/api")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
 
 }

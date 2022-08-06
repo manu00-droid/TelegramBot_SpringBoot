@@ -1,6 +1,7 @@
 package com.thapar.CropSaviour.Service;
 
 import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Service
