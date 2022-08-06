@@ -1,0 +1,11 @@
+com/thapar/CropSaviour/bot/CropSaviourBot.class
+com/thapar/CropSaviour/Service/PunjabiRemedyService.class
+com/thapar/CropSaviour/VO/User.class
+com/thapar/CropSaviour/Service/TranslateService.class
+com/thapar/CropSaviour/Service/ClassifierService.class
+com/thapar/CropSaviour/Service/AudioService.class
+com/thapar/CropSaviour/Service/KeyboardService.class
+com/thapar/CropSaviour/Service/HindiRemedyService.class
+com/thapar/CropSaviour/Service/UserInfoService.class
+com/thapar/CropSaviour/Service/EnglishRemedyService.class
+com/thapar/CropSaviour/CropSaviourApplication.class
