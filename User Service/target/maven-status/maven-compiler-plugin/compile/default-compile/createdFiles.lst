@@ -1,5 +1,0 @@
-com/Telegram/bot/user/service/controller/UserController.class
-com/Telegram/bot/user/service/UserServiceApplication.class
-com/Telegram/bot/user/service/repository/UserRepository.class
-com/Telegram/bot/user/service/service/UserService.class
-com/Telegram/bot/user/service/entity/User.class
