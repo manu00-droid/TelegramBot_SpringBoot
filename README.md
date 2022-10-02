@@ -13,8 +13,8 @@ Using a Resnet50 model for classification of rice diseases and Efficientnet b0 f
 
 <br />
 
-![1](https://user-images.githubusercontent.com/79694635/190929138-7bdd2f59-1b2c-4246-b75d-9142902a3a23.jpg)
 
+![archi (1)](https://user-images.githubusercontent.com/79694635/193447877-14d993ec-8173-4c6b-b544-222501daac07.jpg)
 
 ## Bot working images:
 
