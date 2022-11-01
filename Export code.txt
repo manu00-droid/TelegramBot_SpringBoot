@@ -1,0 +1,4 @@
+export PYTHONPATH="/home/manav/Workspaces/TelegramBot_SpringBoot/PythonClassifierService/classifiers/apis/AI_models:${PYTHONPATH}"
+python manage.py runserver 8083
+export PYTHONPATH="/home/manav/Workspaces/TelegramBot_SpringBoot/PythonTranslateService/translate/apis/Modules:${PYTHONPATH}"
+python manage.py runserver 8082
