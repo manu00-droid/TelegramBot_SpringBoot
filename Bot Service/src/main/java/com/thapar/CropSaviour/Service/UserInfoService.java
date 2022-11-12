@@ -10,15 +10,20 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
 public class UserInfoService {
-    private final String BASE_URI = "http://127.0.0.1:8081/users/";
-    private final String GET_LANGUAGE = "getlanguage/{chatId}";
-    private final String GET_CROP = "getcrop/{chatId}";
-    private final String SET_CROP_NULL = "setcropnull/{chatId}";
-    private WebClient webClient = WebClient.create(BASE_URI);
+    private static final String BASE_URI = "http://127.0.0.1:8081/users/";
+    private static final String GET_LANGUAGE = "getlanguage/{chatId}";
+    private static final String GET_CROP = "getcrop/{chatId}";
+    private static final String GET_RECENT_IMAGE_PATH = "getrecentimagepath/{chatId}";
+    private static final String SET_CROP_NULL = "setcropnull/{chatId}";
+
+    private static final String SET_RECENT_IMAGE_PATH = "setrecentimagepath/{chatId}/{recentImagePath}";
+    private static final String SET_RECENT_IMAGE_PATH_NULL = "setrecentimagepathnull/{chatId}";
+    private final WebClient webClient = WebClient.create(BASE_URI);
 
 
     //			MultiValueMap<String, Long> bodyValues = new LinkedMultiValueMap<>();
@@ -167,6 +172,21 @@ public class UserInfoService {
         }
     }
 
+    public String getRecentImagePathByChatId(Long chatId) {
+        Optional imagePath = webClient.get()
+                .uri(GET_RECENT_IMAGE_PATH, chatId.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(Optional.class)
+                .block();
+        if (imagePath.isPresent())
+            return (String) imagePath.get();
+        else {
+            System.out.println("CROP NOT PRESENT");
+            return null;
+        }
+    }
+
     public void setLanguageByChatId(String language, Long chatId) {
         MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
         bodyValues.add("language", language);
@@ -181,7 +201,7 @@ public class UserInfoService {
 
     public void setCropByChatId(String cropType, Long chatId) {
         MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
-        bodyValues.add("Crop", cropType);
+        bodyValues.add("crop", cropType);
 
         User user;
         user = webClient.put()
@@ -190,12 +210,33 @@ public class UserInfoService {
                 .body(BodyInserters.fromFormData(bodyValues))
                 .retrieve()
                 .bodyToMono(User.class).block();
-
     }
 
     public void setCropNull(Long chatId) {
         webClient.put()
                 .uri(SET_CROP_NULL, chatId.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(User.class).block();
+    }
+
+    public void setRecentImagePathByChatId(Long chatId, String imagePath) {
+//        MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+        String originalInput = imagePath;
+        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+//        bodyValues.add("recentFilePath", encodedString);
+
+        webClient.put()
+                .uri(SET_RECENT_IMAGE_PATH, chatId.toString(), encodedString)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(User.class).block();
+
+    }
+
+    public void setRecentImagePathNullByChatId(Long chatId) {
+        webClient.put()
+                .uri(SET_RECENT_IMAGE_PATH_NULL, chatId.toString())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToMono(User.class).block();
