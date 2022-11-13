@@ -32,6 +32,8 @@ public class CropSaviourBot extends TelegramLongPollingBot {
     @Autowired
     private TranslateService translateService;
     @Autowired
+    private MandiService mandiService;
+    @Autowired
     private RemedyService remedyService;
     @Autowired
     private AudioService audioService;
@@ -119,16 +121,35 @@ public class CropSaviourBot extends TelegramLongPollingBot {
                 response.setText(text);
                 execute(response);
             }
-        } else {
+        } else if (message.getText().equalsIgnoreCase("/mandiRate")) {
+            String mandi = "\uD83D\uDCB0\uD83D\uDCB0Mandi Rates\uD83D\uDCB0\uD83D\uDCB0";
+            response.setText(mandi);
+            execute(response);
             if (userInfoService.isPresentLanguage(chatId)) {
-                String language = userInfoService.getLanguageByChatId(chatId);
-                String text = translateService.translateData("Hello, Welcome to Crop Saviour Bot. Please type ", language) + "/start";
-                response.setText(text);
-                execute(response);
+                mandi = translateService.translateData("Send crop and state name in the following form:-", userInfoService.getLanguageByChatId(chatId));
+            }
+            response.setText(mandi);
+            execute(response);
+            mandi = "mandi crop state\nexample:-\nmandi rice west-bengal";
+            response.setText(mandi);
+            execute(response);
+        } else {
+            String[] split = message.getText().toLowerCase().split("\\s+");
+            List<String> splitList = Arrays.asList(split);
+            System.out.println(Arrays.toString(split));
+            if (splitList.contains("mandi")) {
+                mandiHandler(splitList.get(1), splitList.get(2), chatId);
             } else {
-                String text = "Hello, Welcome to Crop Saviour Bot.\nPlease type /start";
-                response.setText(text);
-                execute(response);
+                if (userInfoService.isPresentLanguage(chatId)) {
+                    String language = userInfoService.getLanguageByChatId(chatId);
+                    String text = translateService.translateData("Hello, Welcome to Crop Saviour Bot. Please type ", language) + "/start";
+                    response.setText(text);
+                    execute(response);
+                } else {
+                    String text = "Hello, Welcome to Crop Saviour Bot.\nPlease type /start";
+                    response.setText(text);
+                    execute(response);
+                }
             }
         }
     }
@@ -234,8 +255,13 @@ public class CropSaviourBot extends TelegramLongPollingBot {
                 userInfoService.setCropByChatId("weed", chatId);
                 predictDisease(chatId, recentImagePath, "weed");
             } else {
-                userInfoService.setCropByChatId("mandi", chatId);
-                mandiHandler();
+//                userInfoService.setCropByChatId("mandi", chatId);
+                String mandi = translateService.translateData("Send commodity and state name in the following form:-", language);
+                response.setText(mandi);
+                execute(response);
+                mandi = "mandi commodity state\nexample:-\nmandi rice west-bengal";
+                response.setText(mandi);
+                execute(response);
             }
         } else {
             if (splitList.contains("wheatButton")) {
@@ -246,19 +272,31 @@ public class CropSaviourBot extends TelegramLongPollingBot {
                 data = "weed";
             } else {
                 data = "mandi";
+                String mandi = "\uD83D\uDCB0\uD83D\uDCB0Mandi Rates\uD83D\uDCB0\uD83D\uDCB0";
+                response.setText(mandi);
+                execute(response);
+                mandi = translateService.translateData("Send commodity and state name in the following form:-", language);
+                response.setText(mandi);
+                execute(response);
+                mandi = "mandi commodity state\nexample:-\nmandi rice west-bengal";
+                response.setText(mandi);
+                execute(response);
             }
-            userInfoService.setCropByChatId(data, chatId);
-            String uploadImage = translateService.translateData("Please Upload Image", language);
-            response.setText(uploadImage);
-            execute(response);
+            if (!data.equalsIgnoreCase("mandi")) {
+                userInfoService.setCropByChatId(data, chatId);
+                String uploadImage = translateService.translateData("Please Upload Image", language);
+                response.setText(uploadImage);
+                execute(response);
+            }
         }
 //        response = keyboardService.sendKeyboardForLocation(chatId);
 //        execute(response);
     }
 
-    private void mandiHandler() {
-
+    private void mandiHandler(String commodity, String state, Long chatId) {
+        mandiService.sendMandiRate(commodity, state, chatId);
     }
+
 
     private void predictDisease(Long chatId, String filePath, String cropType) throws TelegramApiException, FileNotFoundException {
         SendMessage response = new SendMessage();
