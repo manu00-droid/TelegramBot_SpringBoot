@@ -1,10 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import json
-import os
 import rice_classifiers
 import wheat_classifier
 import custom_sesame_yolov4_image_nms
+import mandi
 
 
 # rice_classifiers = os.path.join(os.path.dirname(os.path.dirname(__file__)),
@@ -21,7 +20,7 @@ import custom_sesame_yolov4_image_nms
 @api_view(['POST'])
 def predict(request):
     # data = json.loads(request.body.decode('utf-8'))
-    # # data=request.body
+    # data=request.body
     # print(data)
     print(request.POST.get)
     file_path = request.POST.get('file_path')
@@ -38,3 +37,12 @@ def predict(request):
         img_path = custom_sesame_yolov4_image_nms.weedDetection(file_path)
         return Response(img_path)
     return Response("invalid crop")
+
+
+@api_view(['GET'])
+def mandi_rate(request):
+    crop = request.GET.dict()['crop']
+    state = request.GET.dict()['state']
+    chat_id = request.GET.dict()['chat_id']
+    mandi.prices(crop, state, chat_id)
+    return Response("okay")
