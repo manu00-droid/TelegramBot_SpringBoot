@@ -18,12 +18,13 @@ import java.util.Optional;
 public class DatasetInfoService {
     private static final String BASE_URI = "http://127.0.0.1:8081/dataset/";
 
-    private static final String SET_LAT_LNG_BY_FILE_PATH = "setlatlng/";
-    private static final String IS_FILE_PRESENT = "isfilepresent/{encoded_file_path}";
+    private static final String SET_LAT_LNG_BY_FILE_PATH = "setLatLng/";
+    private static final String IS_FILE_PRESENT = "isFilePresent/{encoded_file_path}";
     private final WebClient webClient = WebClient.create(BASE_URI);
 
 
     public Dataset saveFile(Long chatId, String crop_type, String disease_type, String file_path, double lat, double lng) {
+        disease_type = disease_type.replaceAll(" ", "_").toLowerCase();
         MultiValueMap<String, String> bodyValues2 = new LinkedMultiValueMap<>();
         bodyValues2.add("chatId", chatId.toString());
         bodyValues2.add("crop_type", crop_type);
