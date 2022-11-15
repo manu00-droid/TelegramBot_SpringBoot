@@ -7,11 +7,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -161,9 +165,9 @@ public class CropSaviourBot extends TelegramLongPollingBot {
         response.setChatId(chatId);
         String language = userInfoService.getLanguageByChatId(chatId);
         String recentImagePath = userInfoService.getRecentImagePathByChatId(chatId);
-        String location = "Your location: -\nLatitude: " + message.getLocation().getLatitude() + " Longitude: " + message.getLocation().getLongitude();
-        response.setText(location);
-        execute(response);
+//        String location = "Your location: -\nLatitude: " + message.getLocation().getLatitude() + " Longitude: " + message.getLocation().getLongitude();
+//        response.setText(location);
+//        execute(response);
         if (recentImagePath == null) {
             if (userInfoService.isPresentLanguage(chatId)) {
                 String text = translateService.translateData("Please send a image first then send location!", language);
@@ -178,6 +182,9 @@ public class CropSaviourBot extends TelegramLongPollingBot {
             if (datasetInfoService.isFilePresent(recentImagePath)) {
                 datasetInfoService.setLatLngByFilePath(recentImagePath, message.getLocation().getLatitude(), message.getLocation().getLongitude());
                 userInfoService.setRecentImagePathNullByChatId(chatId);
+                String success = translateService.translateData("Thank you for sharing location and helping us!", language);
+                response.setText(success);
+                execute(response);
             } else {
                 if (userInfoService.isPresentLanguage(chatId)) {
                     String cropType = userInfoService.getCropByChatId(chatId);
@@ -245,6 +252,9 @@ public class CropSaviourBot extends TelegramLongPollingBot {
         String recentImagePath = userInfoService.getRecentImagePathByChatId(chatId);
         System.out.println("existing imagePath== " + recentImagePath);
         if (recentImagePath != null) {
+            String text = translateService.translateData("You've previously sent an image", language) + "\n" + translateService.translateData("doing processing on that", language);
+            response.setText(text);
+            execute(response);
             if (splitList.contains("wheatButton")) {
                 userInfoService.setCropByChatId("wheat", chatId);
                 predictDisease(chatId, recentImagePath, "wheat");
@@ -303,21 +313,38 @@ public class CropSaviourBot extends TelegramLongPollingBot {
         response.setChatId(chatId);
         String disease = classifierService.classifyDisease(filePath, cropType);
         //fix things for weed!
-        disease = disease.substring(1, disease.length() - 1);
-        System.out.println(disease);
-        response.setText(disease);
-        execute(response);
-        response = remedyService.getRemedy(cropType, disease, chatId);
-        execute(response);
-        if (!disease.equalsIgnoreCase("no disease found")) {
-            SendAudio audio = audioService.sendAudio(chatId, disease);
-            if (audio != null) {
-                execute(audio);
+        if (cropType.equalsIgnoreCase("weed")) {
+            SendPhoto sendPhoto = new SendPhoto();
+            sendPhoto.setChatId(chatId);
+            File mediaFile = new File(disease);
+            InputFile inputFile = new InputFile();
+            inputFile.setMedia(mediaFile);
+            sendPhoto.setPhoto(inputFile);
+            execute(sendPhoto);
+        } else {
+            //remove extra double colon
+//            disease = disease.substring(1, disease.length() - 1);
+            System.out.println(disease);
+            String diseaseResponse = disease + "‼";
+            response.setText(diseaseResponse);
+            execute(response);
+            response = remedyService.getRemedy(cropType, disease, chatId);
+            execute(response);
+            if (!disease.equalsIgnoreCase("no disease found")) {
+                SendAudio audio = audioService.sendAudio(chatId, disease);
+                if (audio != null) {
+                    execute(audio);
+                }
             }
         }
+
         //Modifying dataset database
         if (!datasetInfoService.isFilePresent(filePath)) {
-            datasetInfoService.saveFile(chatId, cropType, disease, filePath, 0, 0);
+            if (cropType.equalsIgnoreCase("weed")) {
+                datasetInfoService.saveFile(chatId, cropType, null, filePath, 0, 0);
+            } else {
+                datasetInfoService.saveFile(chatId, cropType, disease, filePath, 0, 0);
+            }
         } else {
             System.out.println("File path already exists cannot modify dataset database!");
         }
