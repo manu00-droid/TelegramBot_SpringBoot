@@ -17,7 +17,6 @@ import java.util.Optional;
 @Service
 public class DatasetInfoService {
     private static final String BASE_URI = "http://127.0.0.1:8081/dataset/";
-
     private static final String SET_LAT_LNG_BY_FILE_PATH = "setLatLng/";
     private static final String IS_FILE_PRESENT = "isFilePresent/{encoded_file_path}";
     private final WebClient webClient = WebClient.create(BASE_URI);
@@ -53,6 +52,7 @@ public class DatasetInfoService {
                 .bodyToMono(User.class).block();
     }
 
+    
     public boolean isFilePresent(String file_path) {
         String encodedString = Base64.getEncoder().encodeToString(file_path.getBytes());
         boolean isPresent = webClient.get()

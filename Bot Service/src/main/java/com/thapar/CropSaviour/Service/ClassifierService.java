@@ -24,6 +24,8 @@ public class ClassifierService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+        //remove extra double colon
+        disease = disease.substring(1, disease.length() - 1);
         return disease;
     }
 
