@@ -29,9 +29,9 @@ public class KeyboardService {
         InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
         inlineKeyboardButton1.setText("English");
         inlineKeyboardButton1.setCallbackData("language englishButton");
-        inlineKeyboardButton2.setText("Hindi");
+        inlineKeyboardButton2.setText("हिन्दी");
         inlineKeyboardButton2.setCallbackData("language hindiButton");
-        inlineKeyboardButton3.setText("Punjabi");
+        inlineKeyboardButton3.setText("ਪੰਜਾਬੀ");
         inlineKeyboardButton3.setCallbackData("language punjabiButton");
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
@@ -46,7 +46,11 @@ public class KeyboardService {
         inlineKeyboardMarkup.setKeyboard(rowList);
         SendMessage response = new SendMessage();
         response.setChatId(String.valueOf(chatId));
-        response.setText("Please Select Language\n" + "कृपया भाषा चुनें\n" + "ਕਿਰਪਾ ਕਰਕੇ ਭਾਸ਼ਾ ਚੁਣੋ\n");
+        if (userInfoService.isPresentUser(chatId)) {
+            response.setText("Please Select Language\n" + "         कृपया भाषा चुनें\n" + "     ਕਿਰਪਾ ਕਰਕੇ ਭਾਸ਼ਾ ਚੁਣੋ\n");
+        } else {
+            response.setText("\uD83E\uDEB4\uD83E\uDEB4\uD83E\uDEB4Welcome\uD83E\uDEB4\uD83E\uDEB4\uD83E\uDEB4\nPlease Select Language\n" + "         कृपया भाषा चुनें\n" + "     ਕਿਰਪਾ ਕਰਕੇ ਭਾਸ਼ਾ ਚੁਣੋ\n");
+        }
         response.setReplyMarkup(inlineKeyboardMarkup);
         return response;
     }
@@ -54,10 +58,10 @@ public class KeyboardService {
     public SendMessage sendInlineKeyboardForCrop(Long chatId) throws IOException {
         System.out.println("in Keyboard Service for crop");
         String language = userInfoService.getLanguageByChatId(chatId);
-        String wheat = translateService.translateData("Wheat", language);
-        String rice = translateService.translateData("Rice", language);
-        String weed = translateService.translateData("Weed detection", language);
-        String mandiRate = translateService.translateData("Mandi Rate", language);
+        String wheat = "\uD83C\uDF3E" + translateService.translateData("Wheat", language) + "\uD83C\uDF3E";
+        String rice = translateService.translateData("\uD83C\uDF5ARice\uD83C\uDF5A", language);
+        String weed = translateService.translateData("\uD83C\uDF3FWeed detection\uD83C\uDF3F", language);
+        String mandiRate = translateService.translateData("\uD83D\uDCB0Mandi Rate\uD83D\uDCB0", language);
         String selectCrop = translateService.translateData("Please Select Crop", language);
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
@@ -96,7 +100,7 @@ public class KeyboardService {
     public SendMessage sendKeyboardForLocation(Long chatId) {
         System.out.println("in Keyboard Service for location");
         String language = userInfoService.getLanguageByChatId(chatId);
-        String locationRequest = translateService.translateData("Tap to send Location", language);
+        String locationRequest = translateService.translateData("Tap to send Location", language) + "\uD83D\uDCCD";
         KeyboardButton keyboardButton = new KeyboardButton();
         keyboardButton.setRequestLocation(true);
         keyboardButton.setText(locationRequest);
@@ -110,7 +114,7 @@ public class KeyboardService {
         replyKeyboardMarkup.setOneTimeKeyboard(true);
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
-        response.setText(translateService.translateData("Please send your location", language));
+        response.setText(translateService.translateData("Please send your location", language) + "\uD83D\uDCCD");
         response.setReplyMarkup(replyKeyboardMarkup);
         return response;
     }
