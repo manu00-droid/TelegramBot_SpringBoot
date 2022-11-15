@@ -59,9 +59,9 @@ public class KeyboardService {
         System.out.println("in Keyboard Service for crop");
         String language = userInfoService.getLanguageByChatId(chatId);
         String wheat = "\uD83C\uDF3E" + translateService.translateData("Wheat", language) + "\uD83C\uDF3E";
-        String rice = translateService.translateData("\uD83C\uDF5ARice\uD83C\uDF5A", language);
-        String weed = translateService.translateData("\uD83C\uDF3FWeed detection\uD83C\uDF3F", language);
-        String mandiRate = translateService.translateData("\uD83D\uDCB0Mandi Rate\uD83D\uDCB0", language);
+        String rice = "\uD83C\uDF5A" + translateService.translateData("Rice", language) + "\uD83C\uDF5A";
+        String weed = "\uD83C\uDF3F" + translateService.translateData("Weed detection", language) + "\uD83C\uDF3F";
+        String mandiRate = "\uD83D\uDCB0" + translateService.translateData("Mandi Rate", language) + "\uD83D\uDCB0";
         String selectCrop = translateService.translateData("Please Select Crop", language);
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
