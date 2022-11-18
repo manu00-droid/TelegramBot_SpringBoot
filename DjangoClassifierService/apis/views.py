@@ -4,7 +4,7 @@ import rice_classifiers
 import wheat_classifier
 import custom_sesame_yolov4_image_nms
 import mandi
-import translator
+# import translator
 
 
 @api_view(['POST'])
@@ -38,10 +38,10 @@ def mandi_rate(request):
     return Response("okay")
 
 
-@api_view(['POST'])
-def translate(request):
-    print(request.data)
-    text = request.data['text']
-    language = request.data['language']
-    translated_text = translator.translation(text, language)
-    return Response(translated_text)
+# @api_view(['POST'])
+# def translate(request):
+#     print(request.data)
+#     text = request.data['text']
+#     language = request.data['language']
+#     translated_text = translator.translation(text, language)
+#     return Response(translated_text)
