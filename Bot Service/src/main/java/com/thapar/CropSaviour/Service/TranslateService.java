@@ -17,7 +17,7 @@ import java.net.URLEncoder;
 
 @Service
 public class TranslateService {
-    private final String BASE_URI = "http://127.0.0.1:8082/translate/";
+    private final String BASE_URI = "http://127.0.0.1:8083/translate/";
     private WebClient webClient = WebClient.create(BASE_URI);
 
     public String translateData(String text, String language) {
