@@ -44,7 +44,7 @@ public class CropSaviourBot extends TelegramLongPollingBot {
 
     //    @Autowired
 //    private MandiService mandiService;
-    private final String IMAGE_DOWNLOAD_PATH = "/home/manav/Workspaces/TelegramBot_SpringBoot/Bot Service/src/main/java/com/thapar/CropSaviour/DownloadedImages/";
+    private final String IMAGE_DOWNLOAD_PATH = System.getProperty("user.dir")+"/src/main/java/com/thapar/CropSaviour/DownloadedImages/";
 
     @Override
     public void onUpdateReceived(Update update) {

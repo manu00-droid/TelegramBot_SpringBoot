@@ -9,7 +9,8 @@ import java.io.File;
 
 @Service
 public class AudioService {
-    private static final String HOME_PATH = "/home/manav/Workspaces/TelegramBot_SpringBoot/";
+    private static final String HOME_PATH = System.getProperty("user.dir");
+
     @Autowired
     private UserInfoService userInfoService;
 
@@ -24,7 +25,7 @@ public class AudioService {
         InputFile inputFile = new InputFile();
 
         if (disease.equalsIgnoreCase("leaf rust") || disease.equalsIgnoreCase("yellow rust") || disease.equalsIgnoreCase("stem rust")) {
-            String fname = HOME_PATH+"Bot Service/src/main/java/com/thapar/CropSaviour/AudioFiles/Rust" + "_" + language;
+            String fname = HOME_PATH+"/src/main/java/com/thapar/CropSaviour/AudioFiles/Rust" + "_" + language;
             java.io.File f = new File(fname);
             inputFile.setMedia(f);
             sendAudio.setAudio(inputFile);
@@ -32,7 +33,7 @@ public class AudioService {
         }
 
         if (disease.equalsIgnoreCase("Blast") || disease.equalsIgnoreCase("Leaf Blast")) {
-            String fname = HOME_PATH+"Bot Service/src/main/java/com/thapar/CropSaviour/AudioFiles/Leaf Blast" + "_" + language;
+            String fname = HOME_PATH+"/src/main/java/com/thapar/CropSaviour/AudioFiles/Leaf Blast" + "_" + language;
             java.io.File f = new File(fname);
             inputFile.setMedia(f);
             sendAudio.setAudio(inputFile);
@@ -41,7 +42,7 @@ public class AudioService {
 
         boolean check = ifPresent(language, disease);
         if (check) {
-            String fname = HOME_PATH+"Bot Service/src/main/java/com/thapar/CropSaviour/AudioFiles/" + disease + "_" + language;
+            String fname = HOME_PATH+"/src/main/java/com/thapar/CropSaviour/AudioFiles/" + disease + "_" + language;
             java.io.File f = new File(fname);
             inputFile.setMedia(f);
             sendAudio.setAudio(inputFile);
@@ -56,7 +57,7 @@ public class AudioService {
         if (disease.equalsIgnoreCase("healthy")) {
             return true;
         }
-        File directory = new File(HOME_PATH+"Bot Service/src/main/java/com/thapar/CropSaviour/AudioFiles/");
+        File directory = new File(HOME_PATH+"/src/main/java/com/thapar/CropSaviour/AudioFiles/");
         String[] flist = directory.list();
         if (flist == null) {
             System.out.println("Empty directory.");
