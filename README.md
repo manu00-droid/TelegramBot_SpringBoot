@@ -1,5 +1,5 @@
 # TelegramBot_SpringBoot
-Telegram bot developed as a spring boot application.
+Telegram bot developed using spring boot.
 
 It is used to classify Rice, Wheat dieseases and detect presence of Weed in rice crop fields.
 Using a Resnet50 model for classification of rice diseases and Efficientnet b0 for Wheat crop accuracy for both was above 93%, atlast yolov5 was used to detect presence of weed in rice crops.
