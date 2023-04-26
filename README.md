@@ -138,3 +138,6 @@ java -jar /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/User Service/targ
 java -jar /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/bot-service/target/CropSaviour-0.0.1-SNAPSHOT.jar
 ```
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/manu00-droid/TelegramBot_SpringBoot/blob/main/LICENSE) file for details.
