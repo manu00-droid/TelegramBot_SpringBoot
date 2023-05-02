@@ -78,65 +78,33 @@ Using a Resnet50 model for classification of rice diseases and Efficientnet b0 f
         return "BOT_API_KEY";
     }
 ```
+<br/>
+
 - Download weed detection model weights and place it in PythonClassifierService/classifiers/apis/AI_models/ directory.
 ```
 https://drive.google.com/file/d/1ywgBMK3VwAqVpnppe8yMUvHLnejq878k/view?usp=sharing
 ```
 
-- Configure the Paths present in CropSaviourBot.java, AudioService.java, custom_sesame_yolov4_image_nms.py, Inference.py, rice_classifiers.py files
-<br />
-In CropSaviourBot.java file, change /home/ubuntu/telegram/ path according to your os
-    
-```
-private final String IMAGE_DOWNLOAD_PATH = "/home/ubuntu/telegram/bot-service/src/main/java/com/thapar/CropSaviour/DownloadedImages/";
-```    
-    
-<br />
-Similarly in AudioService.java
-    
-```
-private final String AUDIO_FILES_PATH = "/home/ubuntu/telegram/bot-service/src/main/java/com/thapar/CropSaviour/AudioFiles/";
-```
-In custom_sesame_yolov4_image_nms.py file
- ```
-yolo_model = cv2.dnn.readNetFromDarknet(
-    '/home/ubuntu/Final-Telegram-Bot/PythonClassifierService/classifiers/apis/AI_models/cov_yolov4.cfg',
-    '/home/ubuntu/Final-Telegram-Bot/PythonClassifierService/classifiers/apis/AI_models/cov_yolov4_best.weights'
-)
-```
+- Setup local server of MySQL with the properties as configured in application.properties file of database microservice(or change this file accordingly)
 
-<br />
-In Inference.py file
-
-```
-wheat_model = os.path.join(os.path.dirname(os.path.dirname(__file__)),'/home/ubuntu/Final-Telegram-Bot/PythonClassifierService/classifiers/apis/AI_models/DiseaseClassification.pt')
-```
-
-<br />
-In rice_classifiers.py file
-
-```
-rice_model = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                          '/home/ubuntu/Final-Telegram-Bot/PythonClassifierService/classifiers/apis/AI_models/rice.pt')
-```
-
-- Now export PYTHONPATH from terminal using following commands(Change the paths accordingly)
+- Now export PYTHONPATH from terminal using following commands(Change the paths accordingly) (OPTIONAL)
 ```
 export PYTHONPATH="/home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/PythonTranslateService/translate/apis/Modules:${PYTHONPATH}"
 
 export PYTHONPATH="/home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/PythonClassifierService/classifiers/apis/AI_models:${PYTHONPATH}"
 ```
 
-- Finally run these 4 commands from your terminal
+- Now you need to configure Gunicorn to run Django microservices
+
+- Build the database microservice and botService microservice and run the jar files you'll get in target folders.
+
 ```
-python3 /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/PythonClassifierService/classifiers/manage.py runserver 8083
+java -jar /dir_path/TelegramBot_SpringBoot/database/target/user-service-0.0.1-SNAPSHOT.jar
 
-python3 /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/PythonTranslateService/translate/manage.py runserver 8082
-
-java -jar /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/User Service/target/user-service-0.0.1-SNAPSHOT.jar
-
-java -jar /home/cropsaviour/CropSaviour/TelegramBot_SpringBoot/bot-service/target/CropSaviour-0.0.1-SNAPSHOT.jar
+java -jar /dir_path/TelegramBot_SpringBoot/bot-service/target/CropSaviour-0.0.1-SNAPSHOT.jar
 ```
+
+Change dir_path according to your os
 
 ## License
 
